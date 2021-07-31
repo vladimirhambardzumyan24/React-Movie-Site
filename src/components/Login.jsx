@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
 
-export default function Login({ handleGivEmail }) {
+export default function Login({ handleGivUsersValue }) {
   let history = useHistory();
 
   const formik = useFormik({
@@ -18,13 +18,11 @@ export default function Login({ handleGivEmail }) {
       email: Yup.string().email("Invalid email address").required("Required"),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+        handleGivUsersValue(values)
+        history.push("/films");
     },
   });
 
-  function handleClickLogIn() {
-    history.push("/films");
-  }
 
   return (
     <div className="w-full h-screen flex items-center justify-center">
@@ -36,6 +34,7 @@ export default function Login({ handleGivEmail }) {
           <img
             className="h-20 w-20"
             src="https://raw.githubusercontent.com/sefyudem/Responsive-Login-Form/master/img/avatar.svg"
+            alt="User Logo"
           />
         </div>
         <h2 className="text-3xl text-center text-gray-700 mb-4">Login</h2>
@@ -47,11 +46,12 @@ export default function Login({ handleGivEmail }) {
               id="email"
               name="email"
               type="email"
-              onChange={formik.handleChange}
+              onChange={
+                formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.email}
               placeholder="Email"
-              className="-mx-6 px-8  w-full border rounded px-3 py-2 text-gray-700 focus:outline-none"
+              className="-mx-6 px-8  w-full border rounded py-2 text-gray-700 focus:outline-none"
             />
           </div>
           {formik.touched.email && formik.errors.email ? (
@@ -72,7 +72,7 @@ export default function Login({ handleGivEmail }) {
               onBlur={formik.handleBlur}
               value={formik.values.password}
               placeholder="Password"
-              className="-mx-6 px-8  w-full border rounded px-3 py-2 text-gray-700 focus:outline-none"
+              className="-mx-6 px-8  w-full border rounded py-2 text-gray-700 focus:outline-none"
             />
           </div>
           {formik.touched.password && formik.errors.password ? (
@@ -82,7 +82,6 @@ export default function Login({ handleGivEmail }) {
           ) : null}
         </div>
         <button
-          onClick={handleClickLogIn}
           type="submit"
           className="w-full py-2 rounded-full bg-green-600 text-gray-100  focus:outline-none"
         >
