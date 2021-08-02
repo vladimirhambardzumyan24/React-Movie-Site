@@ -6,7 +6,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar() {
+export default function Navbar({handleChange}) {
     
   let history = useHistory();
 
@@ -15,7 +15,7 @@ export default function Navbar() {
   }
 
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-gray-800 fixed z-50 w-full">
       {({ open }) => (
         <>
           <div className="max-w-10xl mx-auto px-2 sm:px-2 lg:px-8">
@@ -53,7 +53,7 @@ export default function Navbar() {
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div as="div" className="ml-3 relative">
-                  <input />
+                  <input onChange={(e)=>{handleChange(e.target.value)}} />
                   <button
                     className={classNames(
                       "text-gray-300 hover:bg-gray-700 hover:text-white",
