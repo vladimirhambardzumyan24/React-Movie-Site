@@ -7,7 +7,6 @@ export default function Favorites({ handleAddFavorites, handleClickInfo }) {
   let thisUser = loadState("thisUser");
   let users = loadState("users");
   let user = users ? users.filter((user) => user.email === thisUser) : [];
-  console.log(`object`, user);
 
   return (
     <>

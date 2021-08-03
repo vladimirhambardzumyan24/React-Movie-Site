@@ -110,16 +110,12 @@ export default function General() {
   function handleClickInfo(idd) {
     history.push(`/films/${idd}`);
     const apiUrl = `https://api.themoviedb.org/3/movie/${idd}?api_key=a9b4a343adf7d98ac7614d76c835e0ea&language=en-US`;
-    axios({
-      method: "GET",
-      url: apiUrl,
-    })
-      .then((res) => {
-        setFilmInfo(res.data);
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    const fetchData = async () => {
+      let response = await axios(apiUrl);
+      let data = await response.data;
+      setFilmInfo(data);
+    };
+    fetchData();
   }
 
   return (
@@ -145,7 +141,7 @@ export default function General() {
           />
         </Route>
         <Route exact path="/films/:id">
-          <FilmInfo filmInfo={filmInfo} />
+          <FilmInfo filmInfo={filmInfo} handleAddFavorites={handleAddFavorites} />
         </Route>
       </Switch>
     </>
