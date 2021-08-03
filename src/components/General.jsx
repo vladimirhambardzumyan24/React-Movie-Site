@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Route, Switch } from "react-router-dom";
-import { saveState } from "../helpers/localStorage";
+import { Route, Switch, useHistory, useParams } from "react-router-dom";
+import { loadState, saveState } from "../helpers/localStorage";
 import Favorites from "./Favorites";
 import Films from "./Films";
 import Login from "./Login";
 import axios from "axios";
+import FilmInfo from "./FilmInfo";
 
 const fetchData = async (p) => {
   const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=a9b4a343adf7d98ac7614d76c835e0ea&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${p}&with_watch_monetization_types=flatrate`;
@@ -18,20 +19,41 @@ const searchData = async (p, search) => {
   let response = await axios(apiUrl);
   let data = response.data;
   return data;
-}
+};
 
 export default function General() {
   const [usersValue, setUsersValue] = useState([]);
   const [state, setState] = useState([]);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
+  // const [isExist, setIsExist] = useState(true);
+  const [filmInfo, setFilmInfo] = useState();
+  let history = useHistory();
 
+  const getData = useMemo(
+    () => (searchValue ? searchData : fetchData),
+    [searchValue]
+  );
 
-  const getData = useMemo(() => searchValue ? searchData : fetchData, [searchValue])
+  let isExistUser = [];
 
   function handleGivUsersValue(values) {
-    setUsersValue([...usersValue, values]);
-    saveState("users", usersValue);
+    let users = loadState("users") ? loadState("users") : [];
+    if (loadState("users")) {
+      isExistUser = loadState("users").filter(
+        (user) => user.email === values.email
+      );
+    } else {
+      setUsersValue([...usersValue, { ...values, favorites: [] }]);
+      saveState("users", [...users, { ...values, favorites: [] }]);
+      saveState("thisUser", values.email);
+    }
+
+    if (isExistUser.length === 0) {
+      setUsersValue([...usersValue, { ...values, favorites: [] }]);
+      saveState("users", [...users, { ...values, favorites: [] }]);
+      saveState("thisUser", values.email);
+    }
   }
 
   const scrollHandler = (event) => {
@@ -44,10 +66,10 @@ export default function General() {
   };
 
   useEffect(() => {
-    getData(page, searchValue).then(data => {
-      setState(s => [...s, ...data.results])
-    })
-  }, [getData, page, searchValue])
+    getData(page, searchValue).then((data) => {
+      setState((s) => [...s, ...data.results]);
+    });
+  }, [getData, page, searchValue]);
 
   useEffect(() => {
     document.addEventListener("scroll", scrollHandler);
@@ -56,10 +78,51 @@ export default function General() {
 
   function handleChange(value) {
     setSearchValue(value);
-    setState([])
+    setState([]);
   }
 
-  console.log(`state`, state)
+  function handleAddFavorites(film) {
+    let thisUser = loadState("thisUser");
+    let users = loadState("users");
+
+    users.forEach((user) => {
+      if (user.email === thisUser) {
+        let isChecked = user.favorites.filter((item) => film.id === item.id);
+        if (!isChecked.length) {
+          saveState("users", [
+            ...users,
+            (user.favorites = [...user.favorites, film]),
+          ]);
+          film.adult = true;
+        } else {
+          saveState("users", [
+            ...users,
+            (user.favorites = user.favorites.filter(
+              (item) => item.id !== film.id
+            )),
+          ]);
+          film.adult = false;
+        }
+      }
+    });
+  }
+
+  function handleClickInfo(idd) {
+    history.push(`/films/${idd}`);
+    const apiUrl = `https://api.themoviedb.org/3/movie/${idd}?api_key=a9b4a343adf7d98ac7614d76c835e0ea&language=en-US`;
+     axios({
+      method: "GET",
+      url: apiUrl,
+    })
+      .then((res) => {
+        setFilmInfo(res.data);
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  }
+
+  console.log(`filmInfo`, filmInfo);
   return (
     <>
       <Switch>
@@ -67,10 +130,23 @@ export default function General() {
           <Login handleGivUsersValue={handleGivUsersValue} />
         </Route>
         <Route exact path="/films">
-          <Films handleChange={handleChange} state={state} />
+          <Films
+            handleChange={handleChange}
+            state={state}
+            handleAddFavorites={handleAddFavorites}
+            // isExist={isExist}
+            handleClickInfo={handleClickInfo}
+          />
         </Route>
         <Route exact path="/films/favorites">
-          <Favorites />
+          <Favorites
+            handleAddFavorites={handleAddFavorites}
+            // isExist={isExist}
+            handleClickInfo={handleClickInfo}
+          />
+        </Route>
+        <Route exact path="/films/:id">
+          <FilmInfo filmInfo={filmInfo} />
         </Route>
       </Switch>
     </>

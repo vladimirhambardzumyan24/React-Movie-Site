@@ -1,14 +1,7 @@
 import Navbar from "./Navbar";
 import dataGenre from "./DataGenre";
 
-export default function Films({ state, handleChange }) {
-  // const [adult,setAdult]=useState(false)
-
-  function handleAddFavorites(film) {
-    console.log(`film`, film.adult);
-    film.adult = !film.adult;
-  }
-
+export default function Films({ state, handleChange, handleAddFavorites ,handleClickInfo}) {
   return (
     <>
       <Navbar handleChange={handleChange} />
@@ -22,6 +15,7 @@ export default function Films({ state, handleChange }) {
               <div className="bg-white rounded-lg m-h-64 p-2 transform hover:translate-y-2 hover:shadow-xl transition duration-300">
                 <figure className="mb-2">
                   <img
+                  onClick={()=>handleClickInfo(film.id)}
                     src={
                       film.backdrop_path
                         ? "https://image.tmdb.org/t/p/w500/" +
@@ -34,7 +28,7 @@ export default function Films({ state, handleChange }) {
                 </figure>
                 <div className="rounded-lg p-4 bg-gray-600	 flex flex-col">
                   <div>
-                    <h5 className="text-white text-2xl font-bold leading-none">
+                    <h5 className="text-white text-2xl font-bold leading-none ">
                       {film.title}
                     </h5>
                   </div>
@@ -45,19 +39,19 @@ export default function Films({ state, handleChange }) {
                           className="p-px break-all text-white"
                           key={item.name}
                         >
-                          {item.name}
+                          | {item.name} |
                         </span>
                       ) : (
                         ""
                       );
                     })}
                   </div>
-                  <div className="flex items-center">
+                  <div className="flex items-center justify-center">
                     <button
                       onClick={() => {
                         handleAddFavorites(film);
                       }}
-                      className="rounded-full bg-gray-900 text-white hover:bg-white hover:text-purple-900 hover:shadow-xl focus:outline-none w-10 h-10 flex ml-auto transition duration-300"
+                      className="rounded-full bg-gray-900 text-white hover:bg-white hover:text-purple-900 hover:shadow-xl focus:outline-none w-10 h-10 flex  transition duration-300"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -71,13 +65,13 @@ export default function Films({ state, handleChange }) {
                         strokeLinejoin="round"
                         className="stroke-current m-auto"
                       >
-                        {film.adult ? (
-                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                        ) : (
+                        {!film.adult ? (
                           <>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                           </>
+                        ) : (
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
                         )}
                       </svg>
                     </button>
