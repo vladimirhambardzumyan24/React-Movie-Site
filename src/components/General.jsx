@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Route, Switch, useHistory, useParams } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import { loadState, saveState } from "../helpers/localStorage";
 import Favorites from "./Favorites";
 import Films from "./Films";
@@ -110,7 +110,7 @@ export default function General() {
   function handleClickInfo(idd) {
     history.push(`/films/${idd}`);
     const apiUrl = `https://api.themoviedb.org/3/movie/${idd}?api_key=a9b4a343adf7d98ac7614d76c835e0ea&language=en-US`;
-     axios({
+    axios({
       method: "GET",
       url: apiUrl,
     })
@@ -122,7 +122,6 @@ export default function General() {
       });
   }
 
-  console.log(`filmInfo`, filmInfo);
   return (
     <>
       <Switch>
