@@ -1,7 +1,13 @@
 import Navbar from "./Navbar";
 import dataGenre from "./DataGenre";
+import PropTypes from "prop-types";
 
-export default function Films({ state, handleChange, handleAddFavorites ,handleClickInfo}) {
+export default function Films({
+  state,
+  handleChange,
+  handleAddFavorites,
+  handleClickInfo,
+}) {
   return (
     <>
       <Navbar handleChange={handleChange} />
@@ -15,7 +21,7 @@ export default function Films({ state, handleChange, handleAddFavorites ,handleC
               <div className="bg-white rounded-lg m-h-64 p-2 transform hover:translate-y-2 hover:shadow-xl transition duration-300">
                 <figure className="mb-2">
                   <img
-                  onClick={()=>handleClickInfo(film.id)}
+                    onClick={() => handleClickInfo(film.id)}
                     src={
                       film.backdrop_path
                         ? "https://image.tmdb.org/t/p/w500/" +
@@ -85,3 +91,10 @@ export default function Films({ state, handleChange, handleAddFavorites ,handleC
     </>
   );
 }
+
+Films.propTypes = {
+  handleAddFavorites: PropTypes.func,
+  handleClickInfo: PropTypes.func,
+  handleChange: PropTypes.func,
+  state: PropTypes.array,
+};

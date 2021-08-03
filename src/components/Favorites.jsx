@@ -1,17 +1,18 @@
 import { loadState } from "../helpers/localStorage";
 import dataGenre from "./DataGenre";
 import Navbar from "./Navbar";
+import PropTypes from "prop-types";
 
-export default function Favorites({handleAddFavorites,handleClickInfo}){
-    let thisUser = loadState("thisUser");
-    let users=loadState("users")
-    let user=users?users.filter((user)=>user.email===thisUser):[]
-    console.log(`object`, user)
+export default function Favorites({ handleAddFavorites, handleClickInfo }) {
+  let thisUser = loadState("thisUser");
+  let users = loadState("users");
+  let user = users ? users.filter((user) => user.email === thisUser) : [];
+  console.log(`object`, user);
 
-    return(
-        <>
-        <Navbar />
-        <div className="flex flex-wrap  bg-indigo-100 pt-16">
+  return (
+    <>
+      <Navbar />
+      <div className="flex flex-wrap  bg-indigo-100 pt-16">
         <div className="container ml-auto mr-auto">
           {user[0].favorites.map((film) => (
             <div
@@ -19,8 +20,9 @@ export default function Favorites({handleAddFavorites,handleClickInfo}){
               className="w-full md:w-1/2 lg:w-1/4 pl-5 pr-5 mb-5 lg:pl-2 lg:pr-2 inline-block heightCard"
             >
               <div className="bg-white rounded-lg m-h-64 p-2 transform hover:translate-y-2 hover:shadow-xl transition duration-300">
-                <figure  className="mb-2">
-                  <img onClick={()=>handleClickInfo(film.id)}
+                <figure className="mb-2">
+                  <img
+                    onClick={() => handleClickInfo(film.id)}
                     src={
                       film.backdrop_path
                         ? "https://image.tmdb.org/t/p/w500/" +
@@ -31,7 +33,7 @@ export default function Favorites({handleAddFavorites,handleClickInfo}){
                     className="h-64 ml-auto mr-auto"
                   />
                 </figure>
-                <div className="rounded-lg p-4 bg-gray-600	 flex flex-col" >
+                <div className="rounded-lg p-4 bg-gray-600	 flex flex-col">
                   <div>
                     <h5 className="text-white text-2xl font-bold leading-none ">
                       {film.title}
@@ -44,7 +46,7 @@ export default function Favorites({handleAddFavorites,handleClickInfo}){
                           className="p-px break-all text-white"
                           key={item.name}
                         >
-                         | {item.name} |
+                          | {item.name} |
                         </span>
                       ) : (
                         ""
@@ -70,7 +72,6 @@ export default function Favorites({handleAddFavorites,handleClickInfo}){
                         strokeLinejoin="round"
                         className="stroke-current m-auto"
                       >
-                        
                         {!film.adult ? (
                           <>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -79,7 +80,6 @@ export default function Favorites({handleAddFavorites,handleClickInfo}){
                         ) : (
                           <line x1="5" y1="12" x2="19" y2="12"></line>
                         )}
-                        
                       </svg>
                     </button>
                   </div>
@@ -89,6 +89,11 @@ export default function Favorites({handleAddFavorites,handleClickInfo}){
           ))}
         </div>
       </div>
-        </>
-    )
+    </>
+  );
 }
+
+Favorites.propTypes = {
+  handleAddFavorites: PropTypes.func,
+  handleClickInfo: PropTypes.func,
+};

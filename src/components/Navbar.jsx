@@ -1,13 +1,13 @@
 import { Fragment } from "react";
 import { Disclosure } from "@headlessui/react";
 import { Link, useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar({handleChange}) {
-    
+export default function Navbar({ handleChange }) {
   let history = useHistory();
 
   function handleClickLogOut() {
@@ -53,7 +53,11 @@ export default function Navbar({handleChange}) {
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div as="div" className="ml-3 relative">
-                  <input onChange={(e)=>{handleChange(e.target.value)}} />
+                  <input
+                    onChange={(e) => {
+                      handleChange(e.target.value);
+                    }}
+                  />
                   <button
                     className={classNames(
                       "text-gray-300 hover:bg-gray-700 hover:text-white",
@@ -73,3 +77,7 @@ export default function Navbar({handleChange}) {
     </Disclosure>
   );
 }
+
+Navbar.propTypes = {
+  handleChange: PropTypes.func,
+};

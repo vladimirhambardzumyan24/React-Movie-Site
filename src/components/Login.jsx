@@ -2,6 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 
 export default function Login({ handleGivUsersValue }) {
   let history = useHistory();
@@ -18,11 +19,10 @@ export default function Login({ handleGivUsersValue }) {
       email: Yup.string().email("Invalid email address").required("Required"),
     }),
     onSubmit: (values) => {
-        handleGivUsersValue(values)
-        history.push("/films");
+      handleGivUsersValue(values);
+      history.push("/films");
     },
   });
-
 
   return (
     <div className="w-full h-screen flex items-center justify-center">
@@ -46,8 +46,7 @@ export default function Login({ handleGivUsersValue }) {
               id="email"
               name="email"
               type="email"
-              onChange={
-                formik.handleChange}
+              onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.email}
               placeholder="Email"
@@ -91,3 +90,7 @@ export default function Login({ handleGivUsersValue }) {
     </div>
   );
 }
+
+Login.propTypes = {
+  handleGivUsersValue: PropTypes.func,
+};
