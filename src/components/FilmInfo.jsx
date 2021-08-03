@@ -49,6 +49,7 @@ export default function FilmInfo({ filmInfo }) {
           <div className="flex justify-around mt-10">
             {filmInfo.production_companies.map((comp) => (
               <img
+              key={comp.id}
                 className="h-24 w-32 inline-block"
                 src={
                   comp.logo_path
