@@ -26,7 +26,7 @@ export default function General() {
   const [state, setState] = useState([]);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
-  // const [isExist, setIsExist] = useState(true);
+  const [userFavorites, setUserFavorites] = useState([]);
   let history = useHistory();
 
   const getData = useMemo(
@@ -90,21 +90,17 @@ export default function General() {
         if (!isChecked.length) {
           saveState("users", [
             ...users,
-            (user.favorites = [...user.favorites, { ...film, adult: true }]),
+            (user.favorites = [...user.favorites, film]),
           ]);
         } else {
           saveState("users", [
             ...users,
-            (user.favorites = user.favorites.filter((item) => {
-              if (item.id === film.id) {
-                item.adult = false;
-                return false;
-              } else {
-                return true
-              }
-            })),
+            (user.favorites = user.favorites.filter(
+              (item) => item.id !== film.id
+            )),
           ]);
         }
+        setUserFavorites(user.favorites.length ? user.favorites : []);
       }
     });
   }
@@ -131,14 +127,13 @@ export default function General() {
             handleChange={handleChange}
             state={state}
             handleAddFavorites={handleAddFavorites}
-            // isExist={isExist}
             handleClickInfo={handleClickInfo}
+            userFavorites={userFavorites}
           />
         </Route>
         <Route exact path="/films/favorites">
           <Favorites
             handleAddFavorites={handleAddFavorites}
-            // isExist={isExist}
             handleClickInfo={handleClickInfo}
           />
         </Route>

@@ -7,7 +7,6 @@ export default function FilmInfo() {
   let filmInfo = loadState("filmInfo");
   const [isLoad, setIsLoad] = useState(false);
 
-
   useEffect(() => {
     setTimeout(() => {
       setIsLoad(true);

@@ -1,12 +1,12 @@
 import Navbar from "./Navbar";
 import dataGenre from "./DataGenre";
 import PropTypes from "prop-types";
-
 export default function Films({
   state,
   handleChange,
   handleAddFavorites,
   handleClickInfo,
+  userFavorites,
 }) {
   return (
     <>
@@ -71,13 +71,13 @@ export default function Films({
                         strokeLinejoin="round"
                         className="stroke-current m-auto"
                       >
-                        {!film.adult ? (
+                        {userFavorites.some((item) => item.id === film.id) ? (
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        ) : (
                           <>
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                           </>
-                        ) : (
-                          <line x1="5" y1="12" x2="19" y2="12"></line>
                         )}
                       </svg>
                     </button>
@@ -97,4 +97,5 @@ Films.propTypes = {
   handleClickInfo: PropTypes.func,
   handleChange: PropTypes.func,
   state: PropTypes.array,
+  userFavorites: PropTypes.array,
 };
