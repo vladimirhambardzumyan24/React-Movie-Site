@@ -27,7 +27,6 @@ export default function General() {
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   // const [isExist, setIsExist] = useState(true);
-  const [filmInfo, setFilmInfo] = useState();
   let history = useHistory();
 
   const getData = useMemo(
@@ -112,8 +111,8 @@ export default function General() {
     const apiUrl = `https://api.themoviedb.org/3/movie/${idd}?api_key=a9b4a343adf7d98ac7614d76c835e0ea&language=en-US`;
     const fetchData = async () => {
       let response = await axios(apiUrl);
-      let data = await response.data;
-      setFilmInfo(data);
+      let data =  response.data;
+       saveState("filmInfo",data)
     };
     fetchData();
   }
@@ -141,7 +140,7 @@ export default function General() {
           />
         </Route>
         <Route exact path="/films/:id">
-          <FilmInfo filmInfo={filmInfo} handleAddFavorites={handleAddFavorites} />
+          <FilmInfo />
         </Route>
       </Switch>
     </>
