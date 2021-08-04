@@ -90,17 +90,20 @@ export default function General() {
         if (!isChecked.length) {
           saveState("users", [
             ...users,
-            (user.favorites = [...user.favorites, film]),
+            (user.favorites = [...user.favorites, { ...film, adult: true }]),
           ]);
-          film.adult = true;
         } else {
           saveState("users", [
             ...users,
-            (user.favorites = user.favorites.filter(
-              (item) => item.id !== film.id
-            )),
+            (user.favorites = user.favorites.filter((item) => {
+              if (item.id === film.id) {
+                item.adult = false;
+                return false;
+              } else {
+                return true
+              }
+            })),
           ]);
-          film.adult = false;
         }
       }
     });
@@ -111,8 +114,8 @@ export default function General() {
     const apiUrl = `https://api.themoviedb.org/3/movie/${idd}?api_key=a9b4a343adf7d98ac7614d76c835e0ea&language=en-US`;
     const fetchData = async () => {
       let response = await axios(apiUrl);
-      let data =  response.data;
-       saveState("filmInfo",data)
+      let data = response.data;
+      saveState("filmInfo", data);
     };
     fetchData();
   }

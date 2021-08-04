@@ -4,8 +4,9 @@ import { loadState } from "../helpers/localStorage";
 import Navbar from "./Navbar";
 
 export default function FilmInfo() {
-  const [isLoad, setIsLoad] = useState(false);
   let filmInfo = loadState("filmInfo");
+  const [isLoad, setIsLoad] = useState(false);
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -17,8 +18,8 @@ export default function FilmInfo() {
     <>
       <Navbar />
       {!isLoad ? (
-        <div class="pt-20 bg-gray-300 relative flex justify-center items-center h-36">
-          <div class="rounded animate-spin ease duration-300 w-5 h-5 border-2 border-gray-800"></div>
+        <div className="pt-20 bg-gray-300 relative flex justify-center items-center h-36">
+          <div className="rounded animate-spin ease duration-300 w-5 h-5 border-2 border-gray-800"></div>
         </div>
       ) : (
         <div className="pt-16 min-w-screen min-h-screen bg-gray-300 flex items-center p-5 lg:p-10 overflow-hidden relative">
